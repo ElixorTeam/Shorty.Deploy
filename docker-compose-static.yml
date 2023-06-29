@@ -1,0 +1,66 @@
+version: "3"
+
+services:
+    caddy:
+        image: caddy:latest
+        container_name: caddy
+        restart: unless-stopped
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+            - ./caddy/site:/srv
+            - ./caddy/caddy_data:/data
+            - ./caddy/caddy_config:/config
+        networks:
+            - caddy_network
+    postgres:
+        container_name: postgres
+        image: postgres:alpine
+        restart: unless-stopped
+        volumes:
+            - shorty_sql:/var/lib/postgresql/data/pgdata
+        env_file:
+            - .env_example
+        environment:
+            - TZ=UTC
+            - PGTZ=UTC
+            - POSTGRES_DB=links
+            - PGDATA=/var/lib/postgresql/data/pgdata
+        command: postgres -c max_connections=50 -c work_mem=16MB -c maintenance_work_mem=256MB -c random_page_cost=1.1 -c temp_file_limit=256MB -c log_min_duration_statement=200ms -c idle_in_transaction_session_timeout=10s -c lock_timeout=1s -c statement_timeout=60s
+        networks:
+            - sql-network
+    eureka:
+        image: baggerteam/shorty-discovery:latest
+        container_name: "eureka"
+        env_file:
+            - .env_example
+        depends_on:
+            postgres:
+                condition: service_started
+        networks:
+            - gateway-network
+    gateway:
+        image: baggerteam/shorty-gateway:latest
+        container_name: "api-gateway"
+        env_file:
+            - .env_example
+        depends_on:
+            eureka:
+                condition: service_started
+        networks:
+            - proxy-network
+            - gateway-network
+networks:
+    proxy-network:
+        external: true
+    gateway-network:
+        external: true
+    sql-network:
+        external: true
+
+volumes:
+    shorty_sql:
+    caddy_data:
+    caddy_config:

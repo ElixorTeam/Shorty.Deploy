@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+    links-api:
+        image: baggerteam/shorty-links-api:latest
+        container_name: "links-api"
+        env_file:
+            - .env_example
+        networks:
+            - gateway-network
+            - sql-network
+
+networks:
+    sql-network:
+        external: true
+    gateway-network:
+        external: true

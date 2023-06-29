@@ -1,0 +1,4 @@
+domain.ru {
+    reverse_proxy gateway:0000
+    #respond "Hello world"
+}

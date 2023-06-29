@@ -6,13 +6,13 @@ services:
         container_name: "front"
         restart: unless-stopped
         networks:
-            - proxy-network
+            - global-network
     front-redirect:
         image: baggerteam/shorty-redirect:latest
         container_name: "front-redirect"
         restart: unless-stopped
         networks:
-            - proxy-network
+            - global-network
 networks:
-    proxy-network:
+    global-network:
         external: true

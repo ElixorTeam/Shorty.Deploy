@@ -14,7 +14,7 @@ services:
             - ./caddy/caddy_data:/data
             - ./caddy/caddy_config:/config
         networks:
-            - caddy_network
+            - global-network
     postgres:
         container_name: postgres
         image: postgres:alpine
@@ -30,7 +30,7 @@ services:
             - PGDATA=/var/lib/postgresql/data/pgdata
         command: postgres -c max_connections=50 -c work_mem=16MB -c maintenance_work_mem=256MB -c random_page_cost=1.1 -c temp_file_limit=256MB -c log_min_duration_statement=200ms -c idle_in_transaction_session_timeout=10s -c lock_timeout=1s -c statement_timeout=60s
         networks:
-            - sql-network
+            - global-network
     eureka:
         image: baggerteam/shorty-discovery:latest
         container_name: "eureka"
@@ -40,7 +40,7 @@ services:
             postgres:
                 condition: service_started
         networks:
-            - gateway-network
+            - global-network
     gateway:
         image: baggerteam/shorty-gateway:latest
         container_name: "api-gateway"
@@ -50,14 +50,9 @@ services:
             eureka:
                 condition: service_started
         networks:
-            - proxy-network
-            - gateway-network
+            - global-network
 networks:
-    proxy-network:
-        external: true
-    gateway-network:
-        external: true
-    sql-network:
+    global-network:
         external: true
 
 volumes:

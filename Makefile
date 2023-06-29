@@ -14,8 +14,3 @@ front-up:
 	docker-compose -f docker-compose-front.yml up
 back-up:
 	docker-compose -f docker-compose-back.yml up
-network-setup:
-	docker network create proxy-network & \
-	docker network create sql-network & \
-	docker network create gateway-network
-

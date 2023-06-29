@@ -45,7 +45,7 @@ services:
         image: baggerteam/shorty-gateway:latest
         container_name: "api-gateway"
         env_file:
-            - .env_example
+            - .env
         depends_on:
             eureka:
                 condition: service_started

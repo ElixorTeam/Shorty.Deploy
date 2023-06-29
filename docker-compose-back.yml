@@ -5,7 +5,7 @@ services:
         image: baggerteam/shorty-links-api:latest
         container_name: "links-api"
         env_file:
-            - .env_example
+            - .env
         networks:
             - global-network
 

@@ -22,7 +22,7 @@ services:
         volumes:
             - shorty_sql:/var/lib/postgresql/data/pgdata
         env_file:
-            - .env_example
+            - .env
         environment:
             - TZ=UTC
             - PGTZ=UTC
@@ -35,7 +35,7 @@ services:
         image: baggerteam/shorty-discovery:latest
         container_name: "eureka"
         env_file:
-            - .env_example
+            - .env
         depends_on:
             postgres:
                 condition: service_started

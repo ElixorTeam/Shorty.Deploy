@@ -34,6 +34,7 @@ services:
     eureka:
         image: baggerteam/shorty-discovery:latest
         container_name: "eureka"
+        restart: unless-stopped
         env_file:
             - .env
         depends_on:
@@ -44,6 +45,7 @@ services:
     gateway:
         image: baggerteam/shorty-gateway:latest
         container_name: "api-gateway"
+        restart: unless-stopped
         env_file:
             - .env
         depends_on:

@@ -4,6 +4,7 @@ services:
     links-api:
         image: baggerteam/shorty-links-api:latest
         container_name: "links-api"
+        restart: unless-stopped
         env_file:
             - .env
         networks:
